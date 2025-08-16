@@ -19,7 +19,15 @@ OWNERS = ["zni", "waiser"]  # Replace with actual owner usernames
 # Async Helper
 # ----------------------
 async def create_pool():
-    return await asyncpg.create_pool(os.getenv("SUPABASE_DB_URL"))
+    return await asyncpg.create_pool(
+        user="postgres",
+        password="wockboss11$",
+        database="postgres",
+        host="db.jsakzjalxuedioelwtcz.supabase.co",
+        port=5432,
+        min_size=1,
+        max_size=10
+    )
 
 db_pool = asyncio.run(create_pool())
 
