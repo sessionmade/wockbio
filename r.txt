@@ -1,3 +1,4 @@
+asyncpg
 flask
 requests
 werkzeug
