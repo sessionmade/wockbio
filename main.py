@@ -3,9 +3,25 @@ import os, glob, asyncio
 from werkzeug.utils import secure_filename
 import requests
 import asyncpg
+from dotenv import load_dotenv
 
+# ----------------------
+# Load .env
+# ----------------------
+load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = int(os.getenv("DB_PORT", 5432))
+SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "fallback_secret")
+
+# ----------------------
+# Flask Setup
+# ----------------------
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with a secure key
+app.secret_key = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -13,18 +29,18 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'avatars'), exist_ok=True)
 os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'backgrounds'), exist_ok=True)
 
-OWNERS = ["zni", "waiser"]  # Replace with actual owner usernames
+OWNERS = ["zni", "waiser"]
 
 # ----------------------
-# Async Helper
+# Async DB Pool
 # ----------------------
 async def create_pool():
     return await asyncpg.create_pool(
-        user="postgres",
-        password="wockboss11$",
-        database="postgres",
-        host="db.jsakzjalxuedioelwtcz.supabase.co",
-        port=5432,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        host=DB_HOST,
+        port=DB_PORT,
         min_size=1,
         max_size=10
     )
