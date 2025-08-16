@@ -12,7 +12,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'avatars'), exist_ok=True)
 os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'backgrounds'), exist_ok=True)
 
-OWNERS = ["mt", "waiser"]  # Replace with actual owner usernames
+OWNERS = ["zni", "waiser"]  # Replace with actual owner usernames
 
 # ----------------------
 # Helper Functions
@@ -270,3 +270,4 @@ def init_db():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+
