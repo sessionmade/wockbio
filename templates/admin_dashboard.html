@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e0e0e;
+      color: #f5f5f5;
+      padding: 50px 30px;
+      line-height: 1.6;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #ffffff;
+      text-align: center;
+    }
+    h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #dcdcdc;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #161616;
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
+      border: 1px solid #2b2d31;
+    }
+    .success {
+      background-color: #1f1f1f;
+      color: #b7ffb4;
+      padding: 12px 16px;
+      border-left: 4px solid #6aff69;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 600;
+      color: #ddd;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    input[type='text'] {
+      padding: 12px;
+      background-color: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+    }
+    input[type='text']:focus {
+      outline: none;
+      border-color: #555;
+      background-color: #232323;
+    }
+    input[type='checkbox'] {
+      accent-color: #999;
+      transform: scale(1.1);
+      margin-right: 6px;
+    }
+    button,
+    .btn {
+      padding: 12px;
+      background-color: #ffffff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease-in-out;
+    }
+    button:hover,
+    .btn:hover {
+      background-color: #d1d1d1;
+    }
+    .badge {
+      background: #333;
+      color: #eee;
+      border-radius: 8px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      font-size: 0.85em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge img {
+      height: 16px;
+      width: 16px;
+      display: inline-block;
+    }
+    .admin {
+      background: #ff5c5c;
+      color: white;
+      margin-left: 12px;
+    }
+    .user-list {
+      margin-bottom: 2rem;
+      padding-left: 0;
+      list-style: none;
+    }
+    .user-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #2b2d31;
+    }
+    .user-list li:hover {
+      background-color: #1e1e1e;
+    }
+    .badges-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .badges-checkboxes label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .badges-checkboxes img {
+      height: 20px;
+      width: 20px;
+      vertical-align: middle;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 30px 20px;
+      }
+      form {
+        max-width: 100%;
+      }
+      .container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+
+    {% if message %}
+      <div class="success">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <label for="target_username">Username (from biolink):</label>
+      <input
+        type="text"
+        id="target_username"
+        name="target_username"
+        required
+        placeholder="Enter username"
+      />
+
+      <label>Badges:</label>
+      <div class="badges-checkboxes">
+        {% for badge in available_badges %}
+        <label>
+          <input
+            type="checkbox"
+            name="badges"
+            value="{{ badge.name }}"
+            {% if badge.name in selected_badges %}checked{% endif %}
+          />
+          <img src="{{ badge.url }}" alt="{{ badge.name }} badge" />
+          {{ badge.name | capitalize }}
+        </label>
+        {% endfor %}
+      </div>
+
+      <label>
+        <input type="checkbox" name="make_admin" /> Make Admin
+      </label>
+
+      <button type="submit" class="btn">Update User</button>
+    </form>
+
+    <h2>Users</h2>
+    <ul class="user-list">
+      {% for u in users %}
+      <li>
+        {{ u[0] }}
+        {% for b in (u[1] or "").split(',') if b %}
+        {% set badge = available_badges | selectattr("name", "equalto", b) | list | first %}
+        <span class="badge">
+          {% if badge %}
+          <img src="{{ badge.url }}" alt="{{ badge.name }} badge" />
+          {% endif %}
+          {{ b }}
+        </span>
+        {% endfor %}
+        {% if u[2] %}
+        <span class="badge admin">Admin</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

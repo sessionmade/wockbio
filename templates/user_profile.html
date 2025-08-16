@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ username }}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Font options -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: {{ text_color if text_color else '#ffffff' }};
+      --accent-color: #a259ff;
+      --card-bg: rgba(0,0,0,0.7);
+      --text-glow: 0 0 5px {{ text_color if text_color else '#ffffff' }},
+                   0 0 10px {{ text_color if text_color else '#ffffff' }},
+                   0 0 15px {{ text_color if text_color else '#ffffff' }};
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      {% if background %}
+        {% if background.startswith('http') %}
+          background: url('{{ background }}') center/cover no-repeat fixed;
+        {% else %}
+          background: url('/static/{{ background }}') center/cover no-repeat fixed;
+        {% endif %}
+      {% else %}
+        background: url('/static/default_bg.jpg') center/cover no-repeat fixed;
+      {% endif %}
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 24px;
+      width: 380px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: rotate(0deg);
+      animation: rotate 20s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+
+    img.pfp {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 15px;
+      border: 3px solid #fff;
+      background: #222;
+      object-fit: cover;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    img.pfp:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .badges-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .badges img.custom-badge {
+      height: 28px;
+      width: 28px;
+      border-radius: 6px;
+      object-fit: contain;
+      filter: grayscale(20%);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .badges img.custom-badge:hover {
+      filter: grayscale(0%) brightness(1.2);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(162, 89, 255, 0.4);
+    }
+
+    .badges i {
+      font-size: 1.4em;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .badges i:hover {
+      color: var(--accent-color);
+      transform: scale(1.2);
+    }
+
+    .links {
+      margin: 20px 0;
+      font-size: 2.2em;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .links a {
+      color: rgba(255,255,255,0.7);
+      transition: all 0.3s ease;
+    }
+
+    .links a:hover {
+      color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .bio {
+      margin: 20px 0;
+      font-size: 1.1em;
+      color: var(--primary-color);
+      line-height: 1.5;
+      {% if text_glow %}
+        text-shadow: var(--text-glow);
+      {% endif %}
+      {% if custom_font == 'pixel' %}
+        font-family: 'Press Start 2P', cursive;
+        font-size: 0.8em;
+        line-height: 1.8;
+      {% elif custom_font == 'serif' %}
+        font-family: 'Georgia', serif;
+      {% elif custom_font == 'monospace' %}
+        font-family: 'Courier New', monospace;
+      {% elif custom_font == 'modern' %}
+        font-family: 'Montserrat', sans-serif;
+      {% endif %}
+    }
+
+    .stat {
+      position: absolute;
+      top: 20px;
+      font-size: 0.9em;
+      color: #a78bfa;
+      background: rgba(30,30,48,0.7);
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .stat.left { left: 20px; }
+    .stat.right { right: 20px; }
+
+    .stat i {
+      margin-right: 5px;
+    }
+
+    .discord-preview {
+      margin-top: 30px;
+      background: rgba(24,24,28,0.8);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      max-width: 400px;
+      width: 100%;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .discord-preview:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .discord-preview .server-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .discord-preview img {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      margin-right: 20px;
+      background: #222;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .discord-preview .server-info { 
+      color: #fff;
+      flex: 1;
+    }
+
+    .discord-preview .server-name {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .discord-preview .members {
+      color: #b9b9b9;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+    }
+
+    .discord-preview .members i {
+      margin-right: 5px;
+      font-size: 0.8em;
+    }
+
+    .discord-preview .join-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #5865F2 0%, #3a45b5 100%);
+      color: #fff;
+      padding: 10px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 15px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discord-preview .join-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+      background: linear-gradient(135deg, #5865F2 0%, #4a55d8 100%);
+    }
+
+    .discord-preview .join-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0) 45%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0) 55%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) rotate(30deg); }
+      20% { transform: translateX(100%) rotate(30deg); }
+      100% { transform: translateX(100%) rotate(30deg); }
+    }
+
+    .discord-status {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .online { background: #3ba55c; }
+    .idle { background: #faa61a; }
+    .dnd { background: #ed4245; }
+    .offline { background: #747f8d; }
+
+    /* Floating animation for the card */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .card {
+      animation: float 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    {% if show_stats %}
+      <div class="stat left"><i class="fas fa-eye"></i> {{ profile_views or 0 }}</div>
+      <div class="stat right"><i class="fas fa-id-badge"></i> {{ user_id }}</div>
+    {% endif %}
+
+    <img src="{% if avatar %}
+                {% if avatar.startswith('http') %}
+                  {{ avatar }}
+                {% else %}
+                  /static/{{ avatar }}
+                {% endif %}
+              {% else %}
+                /static/default_pfp.png
+              {% endif %}" class="pfp" alt="{{ username }}'s avatar">
+
+    <h2 style="margin: 10px 0; font-size: 1.8em; font-weight: 600;">
+      {{ username }}
+    </h2>
+
+    <div class="badges-container">
+      <div class="badges">
+        {% for badge in badges %}
+          {% set badge_lower = badge|lower %}
+          <img src="{{ url_for('static', filename='badges/' ~ badge_lower ~ '.png') }}"
+               alt="{{ badge }}"
+               title="{{ badge|capitalize }}"
+               class="custom-badge"
+               onerror="this.style.display='none'">
+        {% endfor %}
+
+        {% if discord and show_discord %}
+          <i class="fab fa-discord" title="Discord"></i>
+        {% endif %}
+        {% if github and show_github %}
+          <i class="fab fa-github" title="GitHub"></i>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="bio">{{ bio if bio else "No bio set." }}</div>
+
+    <div class="links">
+      {% if discord %}
+        <a href="https://discord.com/users/{{ discord }}" target="_blank" rel="noopener noreferrer" title="Discord Profile">
+          <i class="fab fa-discord"></i>
+        </a>
+      {% endif %}
+      {% if github %}
+        <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" title="GitHub Profile">
+          <i class="fab fa-github"></i>
+        </a>
+      {% endif %}
+    </div>
+
+    {% if music_url %}
+      <audio id="bg-music" autoplay loop muted style="display:none;">
+        <source src="{{ music_url }}" type="audio/mpeg" />
+      </audio>
+      <script>
+        document.addEventListener('click', function() {
+          const audio = document.getElementById('bg-music');
+          if (audio) {
+            audio.muted = false;
+            audio.play().catch(() => {});
+          }
+        }, { once: true });
+      </script>
+    {% endif %}
+  </div>
+
+  {% if discord_invite and discord_invite.guild %}
+  <div class="discord-preview" role="region" aria-label="Discord Server Preview">
+    <div class="server-header">
+      <img src="{% if discord_invite.guild.icon %}
+                  https://cdn.discordapp.com/icons/{{ discord_invite.guild.id }}/{{ discord_invite.guild.icon }}.png
+                {% else %}
+                  https://cdn.discordapp.com/embed/avatars/0.png
+                {% endif %}" alt="Server Icon" />
+      <div class="server-info">
+        <div class="server-name">{{ discord_invite.guild.name }}</div>
+        <div class="members">
+          <i class="fas fa-users"></i>
+          {{ discord_invite.approximate_presence_count }} online • {{ discord_invite.approximate_member_count }} members
+        </div>
+      </div>
+    </div>
+    <a class="join-btn" href="https://discord.gg/{{ discord_invite.code }}" target="_blank" rel="noopener noreferrer">
+      Join Server <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+    </a>
+  </div>
+  {% endif %}
+</body>
+</html>

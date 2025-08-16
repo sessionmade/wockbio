@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>hope.fail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #202020;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      position: relative;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+    .blur-spot {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blur-spot.blue1 { width: 160px; height: 160px; background: #cdcecf; top: 40px; left: 120px; }
+    .blur-spot.blue2 { width: 250px; height: 250px; background: #cdcecf; top: 360px; left: 380px; }
+    .blur-spot.blue3 { width: 120px; height: 120px; background: #cdcecf; top: 540px; left: 220px; }
+    .blur-spot.purple { width: 180px; height: 180px; background: #cdcecf; top: 160px; right: 140px; }
 
+    .discord-btn {
+      background: white;
+      color: black;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      transition: background-color 0.3s ease;
+      user-select: none;
+      border: none;
+    }
+    .discord-btn:hover { background: #e0e0e0; }
+
+    .discord-icon {
+      width: 16px;
+      height: 16px;
+      fill: rgb(71, 70, 70);
+      display: block;
+    }
+
+    /* New styles for combined input */
+    .input-wrapper {
+      position: relative;
+      max-width: 300px;
+      width: 100%;
+    }
+    .input-wrapper span.prefix {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgb(71, 70, 70);
+      font-weight: 600;
+      user-select: none;
+      pointer-events: none;
+      font-size: 1.125rem; /* text-lg */
+      font-family: 'Inter', sans-serif;
+    }
+    .input-wrapper input {
+      width: 100%;
+      padding-left: 110px; /* enough space for prefix */
+      border: 1px solid #9ca3af; /* gray-400 */
+      border-radius: 0.5rem; /* rounded-lg */
+      font-size: 1.125rem; /* text-lg */
+      color: black;
+      background: white;
+      line-height: 1.5rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .input-wrapper input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px white;
+      border-color: white;
+    }
+  </style>
+</head>
+<body class="relative">
+  <div class="blur-spot blue1"></div>
+  <div class="blur-spot blue2"></div>
+  <div class="blur-spot blue3"></div>
+  <div class="blur-spot purple"></div>
+
+  <header class="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-xl font-semibold select-none">hope.fail</div>
+    <nav class="flex items-center gap-4 text-sm font-normal select-none">
+      <a href="/signup" class="hover:text-gray-300 transition">Sign up</a>
+      <a href="/login" class="hover:text-gray-300 transition">Login</a>
+      <a href="https://discord.gg/4W8Ss44rPz">
+        <button class="bg-white text-black text-sm font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-200 transition">
+          Discord
+        </button>
+      </a>
+    </nav>
+  </header>
+
+  <main class="flex flex-col items-center justify-center text-center px-6 max-w-3xl mx-auto relative z-10 min-h-[calc(100vh-88px)]">
+    <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight max-w-5xl">
+       <span class="italic">Elevating Your <span class="text-gray-400 font-semibold">Digital</span> Presence</span>
+    </h1>
+    <p class="mt-4 text-lg max-w-3xl select-none">Why settle for a standard biolink when you can elevate your online presence with hope.fail?</p>
+
+    <form class="mt-8 flex flex-wrap gap-2 justify-center items-center w-full max-w-xl" onsubmit="event.preventDefault();">
+      <div class="input-wrapper">
+        <span class="prefix">hope.fail/</span>
+        <input 
+          type="text" 
+          name="username" 
+          placeholder="username" 
+          required
+          autocomplete="off"
+        />
+      </div>
+      <button type="submit" class="bg-white hover:bg-gray-200 text-gray-900 font-semibold rounded-lg py-2 px-6 transition-shadow shadow-md">Claim</button>
+    </form>
+  </main>
+</body>
+</html>

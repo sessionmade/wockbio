@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0e0e0e;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Blur spots */
+    .blur-spot {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blur-spot.blue1 { width: 160px; height: 160px; background: #cdcecf; top: 40px; left: 120px; }
+    .blur-spot.blue2 { width: 250px; height: 250px; background: #cdcecf; top: 360px; left: 380px; }
+    .blur-spot.blue3 { width: 120px; height: 120px; background: #cdcecf; top: 540px; left: 220px; }
+    .blur-spot.purple { width: 180px; height: 180px; background: #cdcecf; top: 160px; right: 140px; }
+
+    .container {
+      background: #1c1c1c;
+      padding: 40px 30px;
+      border-radius: 12px;
+      width: 340px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      border: 1px solid #2b2d31;
+      position: relative;
+      z-index: 10;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 12px 12px 12px 38px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2b2d31;
+      color: white;
+      font-size: 14px;
+      transition: 0.2s ease-in-out;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      background-color: #313338;
+      box-shadow: none;
+    }
+
+    .robot-box {
+      display: flex;
+      align-items: center;
+      background: #2b2d31;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .robot-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #5865f2;
+      cursor: pointer;
+    }
+
+    .robot-box span {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #5865f2;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: #4752c4;
+    }
+
+    p {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="blur-spot blue1"></div>
+  <div class="blur-spot blue2"></div>
+  <div class="blur-spot blue3"></div>
+  <div class="blur-spot purple"></div>
+
+  <div class="container">
+    <h2>Hope - Login</h2>
+    <form method="POST">
+      <div class="input-wrapper">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" name="username" placeholder="Username" required>
+      </div>
+
+      <div class="input-wrapper">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/signup">Create one here</a></p>
+  </div>
+</body>
+</html>
